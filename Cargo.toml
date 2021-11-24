@@ -1,5 +1,6 @@
 [package]
 name = "rustscan"
+description = "Simple port scanner built with rust"
 version = "0.1.0"
 edition = "2021"
 

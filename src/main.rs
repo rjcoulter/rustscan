@@ -21,14 +21,14 @@ async fn main() -> Result<(), anyhow::Error> {
         )
         .arg(
             Arg::with_name("concurrency")
-                .help("Concurrency")
+                .help("The amount of threads to spawn")
                 .long("concurrency")
                 .short("c")
                 .default_value("1002"),
         )
         .arg(
             Arg::with_name("verbose")
-                .help("Display detailed information")
+                .help("Display detailed information during the scan")
                 .long("verbose")
                 .short("v"),
         )
