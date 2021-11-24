@@ -38,6 +38,12 @@ async fn main() -> Result<(), anyhow::Error> {
                 .long("full"),
         )
         .arg(
+            Arg::with_name("port")
+            .help("Scan a single port")
+            .long("port")
+            .short("p"),
+        )
+        .arg(
             Arg::with_name("timeout")
                 .help("Connection timeout")
                 .long("timeout")
@@ -50,11 +56,19 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let full = cli_matches.is_present("full");
     let verbose = cli_matches.is_present("verbose");
+
     let concurrency = cli_matches
         .value_of("concurrency")
         .unwrap()
         .parse::<usize>()
         .unwrap_or(1002);
+
+    let port = cli_matches
+        .value_of("port")
+        .unwrap()
+        .parse::<u64>()
+        .unwrap_or(80);
+
     let timeout = cli_matches
         .value_of("timeout")
         .unwrap()
@@ -80,12 +94,12 @@ async fn main() -> Result<(), anyhow::Error> {
         return Err(anyhow::anyhow!("Socket_addresses list is empty"));
     }
 
-    scan(socket_addresses[0].ip(), full, concurrency, timeout).await;
+    scan(socket_addresses[0].ip(), full, port,  concurrency, timeout).await;
 
     Ok(())
 }
 
-async fn scan(target: IpAddr, full: bool, concurrency: usize, timeout: u64) {
+async fn scan(target: IpAddr, full: bool, port: u64, concurrency: usize, timeout: u64) {
     let ports = stream::iter(get_ports(full));
 
     ports
